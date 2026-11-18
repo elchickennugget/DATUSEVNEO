@@ -1,0 +1,13 @@
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="65" fill="#102b68"/>
+  <rect x="65" y="65" width="382" height="382"
+        fill="#2563eb" stroke="#8dbaff" stroke-width="12"/>
+  <path d="M140 155h232v55H140z" fill="#8dbaff"/>
+  <path d="M140 240h232v55H140z" fill="#edf5ff"/>
+  <path d="M140 325h155v55H140z" fill="#8dbaff"/>
+  <text x="256" y="435" font-size="48"
+        font-family="monospace" font-weight="bold"
+        text-anchor="middle" fill="white">DATUSE!</text>
+</svg>
