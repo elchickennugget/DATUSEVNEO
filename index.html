@@ -71,42 +71,127 @@ $('taskList').innerHTML=a.map(t=>{let late=overdue(t),status=t.done?'✓ SELESAI
 $('taskList').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;const t=tasks.find(x=>x.id===b.dataset.id);if(!t)return;if(b.dataset.action==='delete'){if(!confirm('Hapus tugas ini?'))return;tasks=tasks.filter(x=>x.id!==t.id);sound(220);toast('Tugas dihapus.')}else{t.done=b.dataset.action==='done';sound(t.done?820:500);toast(t.done?'Tugas ditandai selesai!':'Status tugas dikembalikan.')}save();render()});
 $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({app:'DATUSE!',profile,tasks},null,2)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='DATUSE-'+profile.replace(/[^a-z0-9_-]/gi,'_')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('Cadangan data diunduh.')});
 $('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const obj=JSON.parse(await file.text());if(!Array.isArray(obj.tasks))throw Error();if(!confirm('Ganti daftar tugas profil ini dengan data cadangan?'))return;tasks=obj.tasks;save();render();toast('Cadangan berhasil dipulihkan.')}catch(err){toast('File cadangan tidak valid.')}e.target.value=''});
-async function askNotify(){if(!('Notification'in window)){toast('Browser tidak mendukung notifikasi.');return}try{const p=await Notification.requestPermission();$('notifyStatus').textContent='Status: '+(p==='granted'?'izin diberikan':p==='denied'?'izin ditolak':'belum diizinkan');if(p==='granted'){new Notification('DATUSE!',{body:'Notifikasi berhasil diaktifkan.'});toast('Izin notifikasi aktif.');sound(800)}else toast('Izin notifikasi belum diberikan.')}catch(e){toast('Tidak bisa meminta izin notifikasi.')}}
-$('notifyBtn').addEventListener('click',askNotify);
-$('testNotifyBtn').addEventListener('click',async()=>{
-  if(!('Notification'in window)){toast('Browser tidak mendukung notifikasi.');return}
-  if(Notification.permission!=='granted'){await askNotify();if(Notification.permission!=='granted')return}
-  try{new Notification('DATUSE! — Uji coba berhasil',{body:'Notifikasi DATUSE! sudah dapat ditampilkan di perangkat ini.',icon:'./icons/icon.svg',tag:'datuse-test'});toast('Notifikasi uji coba dikirim.');sound(850)}catch(e){toast('Notifikasi gagal ditampilkan. Periksa izin Chrome dan Android.')}
-});
-function checkDue(){
-  if(!('Notification'in window)||Notification.permission!=='granted')return;
-  const now=new Date();
-  const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Makassar',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(now).split(':').map(Number);
-  const mins=parts[0]*60+parts[1], start=7*60, end=7*60+30;
-  const d=today();
-  // Pengingat utama hanya pada pukul 07.00–07.30 WITA.
-  // Jika aplikasi baru dibuka setelah jendela itu, kirim satu pengingat susulan.
-  const inWindow=mins>=start&&mins<=end;
-  const catchUp=mins>end;
-  if(!inWindow&&!catchUp)return;
-  for(const t of tasks){
-    if(t.done||t.deadline!==d)continue;
-    const k='datuse_notice_'+profile+'_'+t.id+'_'+d;
-    if(localStorage.getItem(k))continue;
-    const title=catchUp?'DATUSE! — Pengingat susulan':'DATUSE! — Deadline hari ini';
-    const body=(catchUp?'Kamu baru membuka DATUSE!: ':'Jangan lupa tugas hari ini! ')+t.subject+': '+t.name;
-    try{
-      new Notification(title,{body,icon:'./icons/icon.svg',tag:k});
-      localStorage.setItem(k,'1');
-    }catch(e){console.warn('Notifikasi tidak dapat ditampilkan',e)}
+async function showDatuseNotification(title, body, tag){
+  if(!('serviceWorker' in navigator)) throw new Error('Service Worker tidak didukung browser');
+  let registration = await navigator.serviceWorker.getRegistration('./');
+  if(!registration){
+    registration = await navigator.serviceWorker.register('./sw.js');
+  }
+  registration = await navigator.serviceWorker.ready;
+  await registration.showNotification(title, {
+    body,
+    icon: './icons/icon.svg',
+    badge: './icons/icon.svg',
+    tag,
+    vibrate: [150, 80, 150],
+    data: { url: './' }
+  });
+}
+
+async function askNotify(){
+  if(!('Notification' in window)){
+    toast('Browser tidak mendukung notifikasi.');
+    return;
+  }
+  try{
+    const permission = await Notification.requestPermission();
+    $('notifyStatus').textContent = 'Status: ' +
+      (permission === 'granted' ? 'izin diberikan' :
+       permission === 'denied' ? 'izin ditolak' : 'belum diizinkan');
+
+    if(permission === 'granted'){
+      await showDatuseNotification(
+        'DATUSE! — Notifikasi aktif',
+        'Pengingat DATUSE! berhasil diaktifkan di perangkat ini.',
+        'datuse-enabled'
+      );
+      toast('Izin aktif dan notifikasi berhasil ditampilkan.');
+      sound(800);
+    }else{
+      toast('Izin notifikasi belum diberikan.');
+    }
+  }catch(error){
+    console.error('Gagal mengaktifkan notifikasi:', error);
+    toast('Izin ada, tetapi Service Worker gagal. Periksa sw.js.');
   }
 }
+
+$('notifyBtn').addEventListener('click', askNotify);
+
+$('testNotifyBtn').addEventListener('click', async()=>{
+  if(!('Notification' in window)){
+    toast('Browser tidak mendukung notifikasi.');
+    return;
+  }
+  if(Notification.permission !== 'granted'){
+    await askNotify();
+    if(Notification.permission !== 'granted') return;
+  }
+  try{
+    await showDatuseNotification(
+      'DATUSE! — Uji coba berhasil',
+      'Notifikasi DATUSE! sudah dapat ditampilkan di perangkat ini.',
+      'datuse-test'
+    );
+    toast('Notifikasi uji coba berhasil dikirim.');
+    sound(850);
+  }catch(error){
+    console.error('Gagal menampilkan notifikasi uji coba:', error);
+    toast('Gagal melalui Service Worker. Muat ulang halaman lalu coba lagi.');
+  }
+});
+
+async function checkDue(){
+  if(!('Notification' in window) || Notification.permission !== 'granted') return;
+
+  const parts = new Intl.DateTimeFormat('en-GB',{
+    timeZone:'Asia/Makassar',
+    hour:'2-digit',
+    minute:'2-digit',
+    hourCycle:'h23'
+  }).format(new Date()).split(':').map(Number);
+
+  const minutes = parts[0] * 60 + parts[1];
+  const start = 7 * 60;
+  const end = 7 * 60 + 30;
+  const date = today();
+
+  const inWindow = minutes >= start && minutes <= end;
+  const catchUp = minutes > end;
+  if(!inWindow && !catchUp) return;
+
+  for(const task of tasks){
+    if(task.done || task.deadline !== date) continue;
+
+    const key = 'datuse_notice_' + profile + '_' + task.id + '_' + date;
+    if(localStorage.getItem(key)) continue;
+
+    const title = catchUp
+      ? 'DATUSE! — Pengingat susulan'
+      : 'DATUSE! — Deadline hari ini';
+
+    const body = (catchUp ? 'Kamu baru membuka DATUSE!: ' :
+      'Jangan lupa tugas hari ini! ') + task.subject + ': ' + task.name;
+
+    try{
+      await showDatuseNotification(title, body, key);
+      localStorage.setItem(key, '1');
+    }catch(error){
+      console.warn('Pengingat deadline gagal ditampilkan:', error);
+    }
+  }
+}
+
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkDue()});
 window.addEventListener('focus',checkDue);
 setInterval(checkDue,30000);
 load();
 checkDue();
 if('Notification'in window)$('notifyStatus').textContent='Status: '+(Notification.permission==='granted'?'izin diberikan':'belum diizinkan');
-if('serviceWorker'in navigator&&location.protocol!=='file:'){navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('SW gagal:',e))}
+if('serviceWorker' in navigator && location.protocol !== 'file:'){
+  navigator.serviceWorker.register('./sw.js')
+    .then(() => console.log('DATUSE Service Worker siap.'))
+    .catch(error => console.warn('Service Worker gagal didaftarkan:', error));
+}
 </script>
 </body></html>
