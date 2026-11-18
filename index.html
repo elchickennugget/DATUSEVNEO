@@ -1,377 +1,112 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#102b68">
-<title>DATUSE! - Daftar Tugas Sekolah</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102c59">
+<meta name="description" content="DATUSE! - Daftar Tugas Sekolah SMAN 3 Bantaeng">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<title>DATUSE! — Daftar Tugas Sekolah</title>
 <style>
-:root {
-  --bg:#07152f;
-  --panel:#102b58;
-  --blue:#2563eb;
-  --light:#8dbaff;
-  --white:#edf5ff;
-  --muted:#a9bedc;
-  --green:#43d69a;
-  --red:#ff7185;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  padding:18px;
-  background:var(--bg);
-  color:var(--white);
-  font-family:monospace;
-}
-header {
-  text-align:center;
-  padding:18px 8px;
-  border:2px solid var(--light);
-  background:var(--panel);
-  box-shadow:5px 5px 0 #020916;
-}
-h1 {
-  margin:0;
-  color:#8dbaff;
-  font-size:34px;
-  letter-spacing:3px;
-}
-header p { margin:7px 0; }
-.school { color:#fff; font-weight:bold; }
-.pixel {
-  border:2px solid var(--light);
-  background:var(--panel);
-  padding:15px;
-  margin-top:18px;
-  box-shadow:4px 4px 0 #020916;
-}
-h2 {
-  margin-top:0;
-  color:#8dbaff;
-  font-size:17px;
-}
-input,select,button {
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border:2px solid #6d9de7;
-  border-radius:3px;
-  background:#071a3b;
-  color:white;
-  font:inherit;
-}
-button {
-  background:#2563eb;
-  font-weight:bold;
-  cursor:pointer;
-}
-button:active { transform:translateY(2px); }
-button.secondary { background:#173b70; }
-button.danger { background:#9d3047; }
-.task {
-  background:#0a2044;
-  border:1px solid #6d9de7;
-  padding:12px;
-  margin:10px 0;
-}
-.task.done { opacity:.55; }
-.task.done .task-title { text-decoration:line-through; }
-.task-title { font-size:16px; font-weight:bold; }
-.small { color:var(--muted); font-size:12px; }
-.actions {
-  display:flex;
-  gap:7px;
-}
-.actions button { flex:1; }
-footer {
-  text-align:center;
-  margin:24px 0 10px;
-  color:#8dbaff;
-  font-size:12px;
-}
-.status { color:var(--green); }
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{--navy:#102c59;--blue:#2864bd;--pale:#eaf3ff;--ink:#17345f;--yellow:#ffda70;--green:#26784d;--red:#b52f2f}
+*{box-sizing:border-box}body{margin:0;background-color:var(--navy);background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px);background-size:24px 24px;font-family:Nunito,system-ui,sans-serif;color:var(--ink);padding-bottom:env(safe-area-inset-bottom)}
+header{text-align:center;color:white;padding:28px 14px 22px}.logo{font:clamp(30px,9vw,52px) 'Press Start 2P',monospace;letter-spacing:-3px;text-shadow:4px 4px #173c79,7px 7px #071a38;margin:15px 0}.subtitle{color:#c5dcff;font-size:14px}.school{display:inline-block;background:var(--yellow);padding:10px 13px;margin-top:18px;font:9px 'Press Start 2P';box-shadow:4px 4px #071a38}.spark{letter-spacing:12px;font-size:20px}
+main{max-width:760px;margin:auto;padding:0 13px 30px}.panel{background:#f4f8ff;border:3px solid white;box-shadow:5px 5px #071a38;padding:17px;margin:0 0 18px;border-radius:3px}.heading{font-weight:900;color:#1c4e96;margin:0 0 13px;font-size:14px}
+label{display:block;font-size:12px;font-weight:900;margin:12px 0 6px;color:#244875}input,select,textarea{width:100%;padding:12px;border:2px solid #c5d8f5;border-radius:5px;background:white;color:var(--ink);font:600 14px Nunito, sans-serif;min-height:44px}input:focus,select:focus,textarea:focus{outline:2px solid #83b4fa;border-color:var(--blue)}
+button{font:800 13px Nunito,sans-serif;min-height:42px;border:0;border-radius:5px;padding:10px 13px;touch-action:manipulation}.primary{background:var(--blue);color:white;box-shadow:0 4px #143b78}.primary:active,.secondary:active,.danger:active{transform:translateY(2px);box-shadow:none}.secondary{background:#dceaff;color:#204d8d;border:2px solid #a8c7f2}.danger{background:#ffe1e1;color:#a33232;border:2px solid #ffb6b6}.wide{width:100%;margin-top:15px}.profile{display:flex;gap:8px}.profile input{flex:1;min-width:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}.stat{text-align:center;background:#dceaff;border:2px solid #b7d2f8;border-bottom:4px solid #9bbce9;padding:10px 3px}.stat strong{display:block;font:32px VT323;color:#1d579f}.stat span{font-size:9px;font-weight:900}.toolbar{display:flex;gap:8px;margin-bottom:12px}.toolbar>*{min-width:0;flex:1}
+.task{background:white;border:2px solid #c8dcfa;border-left:6px solid #3978ce;padding:13px;margin:0 0 10px;border-radius:4px}.task.done{opacity:.65;border-left-color:#56b887}.task.late{border-left-color:#e64e4e}.taskname{font-weight:900;font-size:16px;overflow-wrap:anywhere}.subject{display:inline-block;background:#e2edff;color:#27599d;padding:4px 8px;margin:7px 0;border-radius:3px;font-size:10px;font-weight:900}.deadline{font-size:12px;color:#526b8d;font-weight:800}.status{display:inline-block;margin-top:8px;padding:5px 8px;background:#fff1cc;color:#936000;font-size:10px;font-weight:900}.status.done{background:#d8f8e7;color:var(--green)}.status.late{background:#ffe0e0;color:var(--red)}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.actions button{font-size:11px;min-height:38px}.empty{text-align:center;color:#7891b3;padding:25px 8px}.empty b{font-size:35px;display:block}.hint{font-size:11px;color:#6b83a4;line-height:1.6}.line{height:5px;background:repeating-linear-gradient(90deg,#4b8be2 0 12px,transparent 12px 18px);margin:16px 0}.toast{position:fixed;z-index:5;bottom:18px;left:50%;transform:translateX(-50%);background:#102c59;color:white;border:2px solid #75a8ef;padding:12px 16px;max-width:90%;text-align:center;font-size:12px;font-weight:900;display:none;box-shadow:4px 4px #071a38}.footer{text-align:center;color:#b8d1f4;font-size:10px;line-height:1.8;padding:12px}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.panel{padding:14px}.toolbar{flex-direction:column}.profile{flex-direction:column}.stats span{font-size:8px}}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>DATUSE!</h1>
-  <p>daftar tugas sekolah</p>
-  <p class="school">SMAN 3 BANTAENG</p>
-</header>
-
-<section class="pixel">
-  <h2>IDENTITAS PENGGUNA</h2>
-  <input id="profile" placeholder="Masukkan nama kamu">
-  <button onclick="saveProfile()">SIMPAN PROFIL</button>
-  <p class="small" id="profileStatus">Belum ada profil aktif.</p>
+<header><div class="spark">✦ ▪ ✦</div><h1 class="logo">DATUSE!</h1><div class="subtitle">(daftar tugas sekolah)</div><div class="school">SMAN 3 BANTAENG</div><div class="spark" style="margin-top:18px">▪ ✦ ▪</div></header>
+<main>
+<section class="panel">
+<h2 class="heading">👤 PROFIL PENGGUNA</h2>
+<div class="profile"><input id="profileName" maxlength="40" placeholder="Nama profil (contoh: Ashar)"><button class="primary" id="saveProfile">GUNAKAN</button></div>
+<p class="hint">Profil memisahkan daftar tugas pada perangkat dan browser ini. Ini bukan akun online; data tidak otomatis tersinkron ke HP lain.</p>
 </section>
-
-<section class="pixel">
-  <h2>TAMBAH TUGAS BARU</h2>
-  <input id="taskName" placeholder="Nama tugas / materi">
-
-  <select id="subject">
-    <option value="">Pilih mata pelajaran</option>
-    <option>Matematika</option>
-    <option>Biologi</option>
-    <option>Sosiologi</option>
-    <option>Fisika</option>
-    <option>Seni Budaya</option>
-    <option>PKN</option>
-    <option>Koding dan AI</option>
-    <option>Penjasorkes</option>
-    <option>PAI</option>
-    <option>Informatika</option>
-    <option>Bahasa Inggris</option>
-    <option>Muatan Lokal</option>
-    <option>Sejarah</option>
-    <option>Kimia</option>
-    <option>Bahasa Indonesia</option>
-    <option>Ekonomi</option>
-    <option>Geografi</option>
-    <option>Lainnya</option>
-  </select>
-
-  <label for="deadline" class="small">TANGGAL DEADLINE</label>
-  <input id="deadline" type="date" min="2026-01-01" max="2030-12-31">
-  <button onclick="addTask()">+ TAMBAHKAN TUGAS</button>
-</section>
-
-<section class="pixel">
-  <h2>DAFTAR TUGAS</h2>
-  <button class="secondary" onclick="showTasks('all')">SEMUA TUGAS</button>
-  <button class="secondary" onclick="showTasks('active')">BELUM SELESAI</button>
-  <button class="secondary" onclick="showTasks('done')">SELESAI</button>
-  <div id="taskList"></div>
-</section>
-
-<section class="pixel">
-  <h2>PUSAT NOTIFIKASI</h2>
-  <p class="small">Pengingat deadline: pukul 07.00–07.30 WITA.</p>
-  <button onclick="enableNotifications()">AKTIFKAN / PERIKSA IZIN</button>
-  <button class="secondary" onclick="testNotification()">KIRIM NOTIFIKASI UJI COBA</button>
-  <p class="small" id="notificationStatus">Status: belum diperiksa.</p>
-</section>
-
-<section class="pixel">
-  <h2>CADANGAN DATA</h2>
-  <button class="secondary" onclick="exportData()">EKSPOR DATA JSON</button>
-  <label class="small" for="importFile">IMPOR DATA CADANGAN</label>
-  <input type="file" id="importFile" accept=".json" onchange="importData(event)">
-</section>
-
-<footer>
-  DATUSE! • SMAN 3 BANTAENG
-  <p>powered by: semut.engine &amp; ChatGPT</p>
-</footer>
-
+<section class="panel">
+<h2 class="heading">📝 TAMBAH ANTRIAN TUGAS</h2>
+<form id="taskForm">
+<label for="subject">MATA PELAJARAN</label>
+<select id="subject" required><option value="">-- Pilih mata pelajaran --</option><option>Matematika</option><option>Biologi</option><option>Sosiologi</option><option>Fisika</option><option>Seni Budaya</option><option>PKN</option><option>Koding dan AI</option><option>Penjasorkes</option><option>PAI</option><option>Informatika</option><option>Bahasa Inggris</option><option>Muatan Lokal</option><option>Sejarah</option><option>Kimia</option><option>Bahasa Indonesia</option><option>Ekonomi</option><option>Geografi</option><option>Lainnya</option></select>
+<label for="taskName">NAMA / JUDUL / MATERI TUGAS</label><textarea id="taskName" rows="2" maxlength="300" placeholder="Contoh: Makalah tentang perubahan sosial..." required></textarea>
+<div class="grid"><div><label for="deadline">TANGGAL DEADLINE</label><input id="deadline" type="date" min="2026-01-01" max="2030-12-31" required></div><div><label for="priority">PRIORITAS</label><select id="priority"><option value="normal">Normal</option><option value="high">Penting!</option><option value="urgent">Sangat mendesak!!</option></select></div></div>
+<button class="primary wide" type="submit">✚ TAMBAHKAN KE ANTRIAN</button>
+</form></section>
+<section class="stats"><div class="stat"><strong id="total">0</strong><span>TOTAL TUGAS</span></div><div class="stat"><strong id="pending">0</strong><span>AKTIF</span></div><div class="stat"><strong id="completed">0</strong><span>SELESAI</span></div></section>
+<section class="panel"><h2 class="heading">📚 DAFTAR ANTRIAN TUGAS</h2><div class="toolbar"><select id="filter"><option value="all">Semua tugas</option><option value="pending">Belum selesai</option><option value="completed">Selesai</option><option value="overdue">Terlambat</option></select><select id="sort"><option value="nearest">Deadline terdekat</option><option value="farthest">Deadline terjauh</option><option value="priority">Prioritas</option><option value="newest">Terbaru</option></select></div><div id="taskList"></div><div class="line"></div><button class="secondary wide" id="exportBtn">↓ EKSPOR CADANGAN DATA</button><label for="importFile">PULIHKAN CADANGAN JSON</label><input id="importFile" type="file" accept="application/json"><p class="hint">Ekspor data secara berkala agar punya salinan cadangan.</p></section>
+<section class="panel"><h2 class="heading">🔔 PENGINGAT DEADLINE</h2><p class="hint">Zona waktu: WITA (Asia/Makassar). Aktifkan izin notifikasi di bawah. Versi ini memeriksa deadline ketika DATUSE! sedang terbuka/aktif. Notifikasi tepat waktu saat aplikasi ditutup memerlukan layanan push di server; browser Android tidak menjamin timer halaman tetap berjalan di latar belakang.</p><button class="primary wide" id="notifyBtn">🔔 AKTIFKAN / PERIKSA IZIN</button>
+<button class="secondary wide" id="testNotifyBtn">▶ KIRIM NOTIFIKASI UJI COBA</button>
+<p class="hint" id="notifyStatus">Status: belum diperiksa.</p>
+<p class="hint">Jam pengingat: 07.00–07.30 WITA pada hari deadline. Jika aplikasi baru dibuka setelah jam tersebut, DATUSE! dapat menampilkan satu pengingat susulan untuk tugas hari ini yang belum diberi notifikasi.</p></section>
+<div class="footer"><div class="line"></div><b style="font-family:'Press Start 2P';font-size:10px">DATUSE! v2.2</b><br>Made for students of SMAN 3 BANTAENG<br>Organize your tasks. Conquer your deadlines.<br><br><span style="font-weight:900;color:#ffda70">powered by: semut.engine &amp; ChatGPT</span></div>
+</main><div class="toast" id="toast" role="status"></div>
 <script>
-let profile = localStorage.getItem("datuse_profile") || "";
-let tasks = [];
-let currentFilter = "all";
-
-function storageKey() {
-  return "datuse_tasks_" + profile;
-}
-
-function loadTasks() {
-  tasks = profile
-    ? JSON.parse(localStorage.getItem(storageKey()) || "[]")
-    : [];
-  renderTasks();
-}
-
-function saveProfile() {
-  const name = document.getElementById("profile").value.trim();
-  if (!name) return alert("Masukkan nama profil terlebih dahulu.");
-  profile = name;
-  localStorage.setItem("datuse_profile", profile);
-  document.getElementById("profileStatus").textContent =
-    "Profil aktif: " + profile;
-  loadTasks();
-}
-
-function addTask() {
-  if (!profile) return alert("Simpan profil terlebih dahulu.");
-  const name = document.getElementById("taskName").value.trim();
-  const subject = document.getElementById("subject").value;
-  const deadline = document.getElementById("deadline").value;
-
-  if (!name || !subject || !deadline)
-    return alert("Lengkapi nama tugas, mata pelajaran, dan deadline.");
-
-  tasks.push({
-    id: Date.now().toString(),
-    name, subject, deadline, done:false
-  });
-
-  saveTasks();
-  document.getElementById("taskName").value = "";
-  document.getElementById("subject").value = "";
-  document.getElementById("deadline").value = "";
-}
-
-function saveTasks() {
-  localStorage.setItem(storageKey(), JSON.stringify(tasks));
-  renderTasks();
-}
-
-function showTasks(filter) {
-  currentFilter = filter;
-  renderTasks();
-}
-
-function renderTasks() {
-  const list = document.getElementById("taskList");
-  list.innerHTML = "";
-
-  let filtered = tasks.filter(t =>
-    currentFilter === "all" ||
-    (currentFilter === "active" && !t.done) ||
-    (currentFilter === "done" && t.done)
-  );
-
-  filtered.sort((a,b) => a.deadline.localeCompare(b.deadline));
-
-  if (!filtered.length) {
-    list.innerHTML = '<p class="small">Belum ada tugas di sini.</p>';
-    return;
+'use strict';
+const $=id=>document.getElementById(id);
+let profile=localStorage.getItem('datuse_profile')||'Pengguna';
+let tasks=[];
+let audioCtx=null;
+function key(){return 'datuse_v2_tasks_'+profile.trim().toLocaleLowerCase('id-ID')}
+function sound(freq=650){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;audioCtx=audioCtx||new C();if(audioCtx.state==='suspended')audioCtx.resume();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=freq;g.gain.setValueAtTime(.045,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.09);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.09)}catch(e){}}
+function toast(s){$('toast').textContent=s;$('toast').style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>$('toast').style.display='none',2400)}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function today(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Makassar',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
+function dateText(s){return new Date(s+'T12:00:00+08:00').toLocaleDateString('id-ID',{timeZone:'Asia/Makassar',day:'numeric',month:'long',year:'numeric'})}
+function overdue(t){return !t.done&&t.deadline<today()}
+function save(){localStorage.setItem(key(),JSON.stringify(tasks))}
+function load(){try{tasks=JSON.parse(localStorage.getItem(key())||'[]');if(!Array.isArray(tasks))tasks=[]}catch(e){tasks=[]}render()}
+$('profileName').value=profile;
+$('saveProfile').addEventListener('click',()=>{const n=$('profileName').value.trim();if(!n)return toast('Isi nama profil dahulu.');profile=n;localStorage.setItem('datuse_profile',profile);load();sound(780);toast('Profil aktif: '+profile)});
+$('taskForm').addEventListener('submit',e=>{e.preventDefault();const d=$('deadline').value;if(!d||d<'2026-01-01'||d>'2030-12-31')return toast('Pilih tanggal antara 2026–2030.');tasks.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),subject:$('subject').value,name:$('taskName').value.trim(),deadline:d,priority:$('priority').value,done:false,created:Date.now()});save();render();e.target.reset();sound(820);toast('Tugas masuk antrean!')});
+$('filter').addEventListener('change',render);$('sort').addEventListener('change',render);
+function render(){let a=[...tasks],f=$('filter').value,s=$('sort').value;if(f==='pending')a=a.filter(t=>!t.done);if(f==='completed')a=a.filter(t=>t.done);if(f==='overdue')a=a.filter(overdue);if(s==='nearest')a.sort((x,y)=>x.deadline.localeCompare(y.deadline));if(s==='farthest')a.sort((x,y)=>y.deadline.localeCompare(x.deadline));if(s==='newest')a.sort((x,y)=>y.created-x.created);if(s==='priority'){let p={urgent:0,high:1,normal:2};a.sort((x,y)=>p[x.priority]-p[y.priority]||x.deadline.localeCompare(y.deadline))}
+$('total').textContent=tasks.length;$('pending').textContent=tasks.filter(t=>!t.done).length;$('completed').textContent=tasks.filter(t=>t.done).length;
+if(!a.length){$('taskList').innerHTML='<div class="empty"><b>📭</b><strong>Belum ada tugas di sini.</strong><br><small>Tambahkan tugas pertamamu di atas.</small></div>';return}
+$('taskList').innerHTML=a.map(t=>{let late=overdue(t),status=t.done?'✓ SELESAI':late?'⚠ TERLAMBAT':'⏳ BELUM SELESAI',pr={normal:'NORMAL',high:'PENTING!',urgent:'SANGAT MENDESAK!!'}[t.priority]||'NORMAL';return `<article class="task ${t.done?'done':''} ${late?'late':''}"><div class="taskname">${escapeHTML(t.name)}</div><span class="subject">${escapeHTML(t.subject)}</span><div class="deadline">📅 Deadline: ${dateText(t.deadline)}</div><div><span class="status ${t.done?'done':late?'late':''}">${status}</span> <small style="font-weight:900;color:#55749c">${pr}</small></div><div class="actions">${t.done?`<button class="secondary" data-action="undo" data-id="${escapeHTML(t.id)}">↶ BATALKAN</button>`:`<button class="primary" data-action="done" data-id="${escapeHTML(t.id)}">✓ SELESAI</button>`}<button class="danger" data-action="delete" data-id="${escapeHTML(t.id)}">✕ HAPUS</button></div></article>`}).join('')}
+$('taskList').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;const t=tasks.find(x=>x.id===b.dataset.id);if(!t)return;if(b.dataset.action==='delete'){if(!confirm('Hapus tugas ini?'))return;tasks=tasks.filter(x=>x.id!==t.id);sound(220);toast('Tugas dihapus.')}else{t.done=b.dataset.action==='done';sound(t.done?820:500);toast(t.done?'Tugas ditandai selesai!':'Status tugas dikembalikan.')}save();render()});
+$('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({app:'DATUSE!',profile,tasks},null,2)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='DATUSE-'+profile.replace(/[^a-z0-9_-]/gi,'_')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('Cadangan data diunduh.')});
+$('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const obj=JSON.parse(await file.text());if(!Array.isArray(obj.tasks))throw Error();if(!confirm('Ganti daftar tugas profil ini dengan data cadangan?'))return;tasks=obj.tasks;save();render();toast('Cadangan berhasil dipulihkan.')}catch(err){toast('File cadangan tidak valid.')}e.target.value=''});
+async function askNotify(){if(!('Notification'in window)){toast('Browser tidak mendukung notifikasi.');return}try{const p=await Notification.requestPermission();$('notifyStatus').textContent='Status: '+(p==='granted'?'izin diberikan':p==='denied'?'izin ditolak':'belum diizinkan');if(p==='granted'){new Notification('DATUSE!',{body:'Notifikasi berhasil diaktifkan.'});toast('Izin notifikasi aktif.');sound(800)}else toast('Izin notifikasi belum diberikan.')}catch(e){toast('Tidak bisa meminta izin notifikasi.')}}
+$('notifyBtn').addEventListener('click',askNotify);
+$('testNotifyBtn').addEventListener('click',async()=>{
+  if(!('Notification'in window)){toast('Browser tidak mendukung notifikasi.');return}
+  if(Notification.permission!=='granted'){await askNotify();if(Notification.permission!=='granted')return}
+  try{new Notification('DATUSE! — Uji coba berhasil',{body:'Notifikasi DATUSE! sudah dapat ditampilkan di perangkat ini.',icon:'./icons/icon.svg',tag:'datuse-test'});toast('Notifikasi uji coba dikirim.');sound(850)}catch(e){toast('Notifikasi gagal ditampilkan. Periksa izin Chrome dan Android.')}
+});
+function checkDue(){
+  if(!('Notification'in window)||Notification.permission!=='granted')return;
+  const now=new Date();
+  const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Makassar',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(now).split(':').map(Number);
+  const mins=parts[0]*60+parts[1], start=7*60, end=7*60+30;
+  const d=today();
+  // Pengingat utama hanya pada pukul 07.00–07.30 WITA.
+  // Jika aplikasi baru dibuka setelah jendela itu, kirim satu pengingat susulan.
+  const inWindow=mins>=start&&mins<=end;
+  const catchUp=mins>end;
+  if(!inWindow&&!catchUp)return;
+  for(const t of tasks){
+    if(t.done||t.deadline!==d)continue;
+    const k='datuse_notice_'+profile+'_'+t.id+'_'+d;
+    if(localStorage.getItem(k))continue;
+    const title=catchUp?'DATUSE! — Pengingat susulan':'DATUSE! — Deadline hari ini';
+    const body=(catchUp?'Kamu baru membuka DATUSE!: ':'Jangan lupa tugas hari ini! ')+t.subject+': '+t.name;
+    try{
+      new Notification(title,{body,icon:'./icons/icon.svg',tag:k});
+      localStorage.setItem(k,'1');
+    }catch(e){console.warn('Notifikasi tidak dapat ditampilkan',e)}
   }
-
-  filtered.forEach(t => {
-    const item = document.createElement("div");
-    item.className = "task" + (t.done ? " done" : "");
-
-    const title = document.createElement("div");
-    title.className = "task-title";
-    title.textContent = t.name;
-
-    const info = document.createElement("p");
-    info.className = "small";
-    info.textContent = t.subject + " • Deadline: " + t.deadline;
-
-    const actions = document.createElement("div");
-    actions.className = "actions";
-
-    const done = document.createElement("button");
-    done.textContent = t.done ? "BATAL SELESAI" : "SELESAIKAN";
-    done.onclick = () => {
-      t.done = !t.done;
-      saveTasks();
-    };
-
-    const del = document.createElement("button");
-    del.className = "danger";
-    del.textContent = "HAPUS";
-    del.onclick = () => {
-      if (confirm("Hapus tugas ini?")) {
-        tasks = tasks.filter(x => x.id !== t.id);
-        saveTasks();
-      }
-    };
-
-    actions.append(done, del);
-    item.append(title, info, actions);
-    list.append(item);
-  });
 }
-
-async function enableNotifications() {
-  if (!("Notification" in window)) {
-    alert("Browser ini tidak mendukung notifikasi.");
-    return;
-  }
-
-  const permission = await Notification.requestPermission();
-  document.getElementById("notificationStatus").textContent =
-    "Status izin: " + permission;
-}
-
-function testNotification() {
-  if (!("Notification" in window))
-    return alert("Notifikasi tidak didukung browser.");
-
-  if (Notification.permission !== "granted")
-    return alert("Aktifkan izin notifikasi terlebih dahulu.");
-
-  new Notification("DATUSE! - Uji Coba", {
-    body: "Notifikasi DATUSE! berhasil diuji."
-  });
-}
-
-function exportData() {
-  if (!profile) return alert("Simpan profil terlebih dahulu.");
-  const blob = new Blob([JSON.stringify(tasks,null,2)], {
-    type:"application/json"
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "DATUSE-cadangan.json";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file || !profile) return alert("Simpan profil terlebih dahulu.");
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const data = JSON.parse(reader.result);
-      if (!Array.isArray(data)) throw new Error();
-      tasks = data;
-      saveTasks();
-      alert("Cadangan berhasil diimpor.");
-    } catch {
-      alert("File cadangan tidak valid.");
-    }
-  };
-  reader.readAsText(file);
-}
-
-function checkReminders() {
-  if (!profile || Notification.permission !== "granted") return;
-
-  const now = new Date();
-  const date = now.getFullYear() + "-" +
-    String(now.getMonth()+1).padStart(2,"0") + "-" +
-    String(now.getDate()).padStart(2,"0");
-
-  const minutes = now.getHours()*60 + now.getMinutes();
-  if (minutes < 420 || minutes > 450) return;
-
-  tasks.filter(t => !t.done && t.deadline === date).forEach(t => {
-    const key = "datuse_sent_" + profile + "_" + date + "_" + t.id;
-    if (localStorage.getItem(key)) return;
-
-    new Notification("DATUSE! - Deadline Hari Ini", {
-      body: t.subject + ": " + t.name
-    });
-    localStorage.setItem(key,"yes");
-  });
-}
-
-if (profile) {
-  document.getElementById("profile").value = profile;
-  document.getElementById("profileStatus").textContent =
-    "Profil aktif: " + profile;
-  loadTasks();
-}
-
-setInterval(checkReminders, 30000);
-checkReminders();
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(console.error);
-  });
-}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkDue()});
+window.addEventListener('focus',checkDue);
+setInterval(checkDue,30000);
+load();
+checkDue();
+if('Notification'in window)$('notifyStatus').textContent='Status: '+(Notification.permission==='granted'?'izin diberikan':'belum diizinkan');
+if('serviceWorker'in navigator&&location.protocol!=='file:'){navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('SW gagal:',e))}
 </script>
-</body>
-</html>
+</body></html>
