@@ -1,12 +1,11 @@
 
-const CACHE_NAME = "datuse-v2-2";
+const CACHE_NAME = "datuse-v2-3";
 
 const APP_FILES = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon.svg"
 ];
 
 self.addEventListener("install", event => {
@@ -72,8 +71,8 @@ self.addEventListener("push", event => {
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
-      icon: "./icons/icon-192.png",
-      badge: "./icons/icon-192.png",
+      icon: "./icons/icon.svg",
+      badge: "./icons/icon.svg",
       data: { url: data.url }
     })
   );
