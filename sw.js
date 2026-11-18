@@ -1,13 +1,13 @@
 
-const CACHE_NAME = "datuse-v2-3";
+const CACHE_NAME = "datuse-v2-4";
 
 const APP_FILES = [
   "./",
   "./index.html",
-  "./manifest.json",
-  "./icons/icon.svg"
+  "./manifest.json"
 ];
 
+// Memasang cache aplikasi
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -16,6 +16,7 @@ self.addEventListener("install", event => {
   );
 });
 
+// Mengaktifkan versi baru
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -28,20 +29,22 @@ self.addEventListener("activate", event => {
   );
 });
 
+// Mengambil file dari cache atau jaringan
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+
+  const url = new URL(event.request.url);
+
+  if (url.origin !== self.location.origin) return;
 
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
 
       return fetch(event.request).then(response => {
-        if (
-          response &&
-          response.status === 200 &&
-          new URL(event.request.url).origin === self.location.origin
-        ) {
+        if (response && response.status === 200) {
           const copy = response.clone();
+
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, copy);
           });
@@ -53,10 +56,11 @@ self.addEventListener("fetch", event => {
   );
 });
 
+// Menerima notifikasi push dari server
 self.addEventListener("push", event => {
   let data = {
-    title: "DATUSE! - Pengingat Tugas",
-    body: "Jangan lupa periksa daftar tugas sekolahmu.",
+    title: "DATUSE! — Pengingat Tugas",
+    body: "Jangan lupa periksa daftar tugas sekolahmu!",
     url: "./"
   };
 
@@ -71,13 +75,14 @@ self.addEventListener("push", event => {
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
-      icon: "./icons/icon.svg",
-      badge: "./icons/icon.svg",
-      data: { url: data.url }
+      tag: "datuse-push",
+      data: { url: data.url },
+      vibrate: [150, 80, 150]
     })
   );
 });
 
+// Membuka aplikasi ketika notifikasi ditekan
 self.addEventListener("notificationclick", event => {
   event.notification.close();
 
@@ -92,7 +97,7 @@ self.addEventListener("notificationclick", event => {
       includeUncontrolled: true
     }).then(windowClients => {
       for (const client of windowClients) {
-        if (client.url === destination && "focus" in client) {
+        if (client.url === destination) {
           return client.focus();
         }
       }
